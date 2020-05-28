@@ -1,4 +1,4 @@
-# From Kinesis to Analytics: a simple serverless data pipeline
+# Kinesis Analytics: a simple serverless data pipeline
 
 ## Overview
 This setup will deploy a data pipeline: a simple Reactjs voting app will send data to Kinesis Firehose, which will be store to S3. Then we will be able to query the data via a QuickSight dashboard (with the help of a Glue crawler). All components are managed services, so cost is low for our tests, and your don't have to maintain any servers nor clusters.
