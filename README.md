@@ -30,7 +30,7 @@ Please setup on your laptop:
 cd terraform
 nano main.yml    <-- edit vars
 ```
-- Deploy all the data pipeline component: 
+- Deploy all the data pipeline components: 
 ```
 terraform init
 terraform apply -var gitHubToken=$GITHUBTOKEN -var tag=$TAG
@@ -42,35 +42,38 @@ cd shill-your-coin
 npm start
 ```
 - Browse http://localhost:3000/ and click few times to generate events...
-- Check that event are sent to kinesis (open devtool > network > firehose.eu-west-1.amazonaws.com = 200), 
+- Check that events are sent to kinesis (open browser devtool > network > `firehose.eu-west-1.amazonaws.com = 200`), 
 
 ## Checks
 
 ### Kinesis
-- Check that Kinesis see data arriving (json)
-- and few minutes later, that data are getting converted to parquet
+- Check that data are pushed to Kinesis: `incomingBytes` (json)
+- And few minutes later, that data are getting converted to parquet: `SucceedConversion`
 ![Kinesis](./.github/images/1.kinesis.png)
 
 ### S3
 - Check that 2 folders are created in S3: 
-  - Source: with the raw json event
-  - Destination: with the kinesis converted event in parquet
+  - **Source**: with the raw json events
+  - **Destination**: with the converted events in parquet
 ![S3](./.github/images/2.s3.png)
 
 ### Glue
-- Open Glue. When the data appears in `destination` folder in S3, the crawler will run and detect the indexing.
-![GLue](./.github/images/3.glue.png)
-- Open Glue > Database > Table `destination`: the crawler will display the resulting index. Your can confirm that it detected well the field `id`, `coin` and date with the columns `partition_*`
-![Glue](./.github/images/3.glue.png)
+- Open Glue. When the data appears in `destination` folder in S3, the crawler will run and detect the indexing of the data.
+![GLue](./.github/images/3.glue-crawler.png)
+![Glue](./.github/images/3.glue-catalog.png)
+- Open Glue > Database > Table `destination`: the crawler will display the resulting index. Your can confirm that it detected well the field `id`, `coin` and dates with the columns `partition_*`
+![Glue](./.github/images/3.glue-schema.png)
 
+
+### Athena
 - Open Athena, select the Glue database and table and do the query below. Athena is using glue metadata to make sense of the S3 data in order to query with SQL format
-![](./.github/images/4.atherna.png)
+![](./.github/images/4.athena.png)
 
 ### Quicksight
-- Finaly, open QuickSight to create a Dashboard of the data.
-- First click on <your user> > manage quicksign > Security and Permission > Add > Athena + S3 > choose the right S3 buckets in details
+- Finaly, open QuickSight to create a dashboard of the data.
+- First click on <your user> > manage QuickSight > Security and Permission > Add > Athena + S3 > choose the right S3 buckets in details
 - Then, New analysis > New dataset > Athena > Choose a name > create data source > select glue table `destination` > Directly query your data > Visualize
-- Drop the field coin in the auto graph and choose a pie chart, you should see the following
+- Drop the field `coin` in the auto graph and choose a pie chart, you should see the following
 ![](./.github/images/5.quicksight.png)
 
 ### Destroy all
