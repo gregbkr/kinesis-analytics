@@ -1,0 +1,12 @@
+# Node
+*/node_modules
+*/yarn.lock
+*/package-lock.json
+
+# terraform
+**/.terraform/*
+terraform/*/.terraform
+terraform/state-backend/.terraform/*
+
+# AWS
+**/**/aws-exports.js
