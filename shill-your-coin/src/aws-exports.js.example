@@ -1,0 +1,7 @@
+const config = {
+    'aws_project_region': 'eu-west-1',
+    'aws_cognito_identity_pool_id': 'eu-west-1:0884d222-8c44-40a0-946d-xxxxxxxx',
+    'aws_firehose_name': 'kinesis-analysis-terra'
+};
+
+export default config;
